@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Estudiantes - Academia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #003d5c 0%, #005a82 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #003d5c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        label .required {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+
+        input, select, textarea {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .icon {
+            font-size: 24px;
+        }
+
+        .beneficiario-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .beneficiario-header {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Registro de Nuevos Estudiantes</h1>
+            <p>Complete el formulario para registrar un nuevo contrato académico</p>
+        </div>
+
+        <div class="form-container">
+            <div id="alertSuccess" class="alert alert-success"></div>
+            <div id="alertError" class="alert alert-error"></div>
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Procesando registro...</p>
+            </div>
+
+            <form id="registroForm">
+                <!-- Información del Contrato -->
+                <div class="section">
+                    <div class="section-title">
+                        <span class="icon">📋</span>
+                        <span>Información del Contrato</span>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>N° de Contrato <span class="required">*</span></label>
+                            <input type="text" name="numeroContrato" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Inducción <span class="required">*</span></label>
+                            <input type="date" name="fechaIngreso" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Día de Pago Mensual <span class="required">*</span></label>
+                            <input type="date" name="fechaPago" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Primer Pago <span class="required">*</span></label>
+                            <input type="date" name="primerPago" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Datos del Titular -->
+                <div class="section">
+                    <div class="section-title">
+                        <span class="icon">👤</span>
+                        <span>Datos del Titular</span>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nombre Completo <span class="required">*</span></label>
+                            <input type="text" name="nombreTitular" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cédula o RUC <span class="required">*</span></label>
+                            <input type="text" name="cedulaTitular" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono/WhatsApp <span class="required">*</span></label>
+                            <input type="tel" name="telefonoTitular" placeholder="0999999999" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico <span class="required">*</span></label>
+                            <input type="email" name="correoElectronico" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Dirección</label>
+                            <input type="text" name="direccion">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beneficiarios -->
+                <div class="section">
+                    <div class="section-title">
+                        <span class="icon">👥</span>
+                        <span>Beneficiarios (Hasta 3 personas)</span>
+                    </div>
+                    
+                    <!-- Beneficiario 1 -->
+                    <div class="beneficiario-item">
+                        <div class="beneficiario-header">Beneficiario 1</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nombre Completo <span class="required">*</span></label>
+                                <input type="text" name="nombreBeneficiario1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Cédula <span class="required">*</span></label>
+                                <input type="text" name="cedulaBeneficiario1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Edad <span class="required">*</span></label>
+                                <input type="number" name="edadBeneficiario1" min="1" max="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" name="telefonoBeneficiario1" placeholder="0999999999">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beneficiario 2 -->
+                    <div class="beneficiario-item">
+                        <div class="beneficiario-header">Beneficiario 2 (Opcional)</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nombre Completo</label>
+                                <input type="text" name="nombreBeneficiario2">
+                            </div>
+                            <div class="form-group">
+                                <label>Cédula</label>
+                                <input type="text" name="cedulaBeneficiario2">
+                            </div>
+                            <div class="form-group">
+                                <label>Edad</label>
+                                <input type="number" name="edadBeneficiario2" min="1" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" name="telefonoBeneficiario2" placeholder="0999999999">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Beneficiario 3 -->
+                    <div class="beneficiario-item">
+                        <div class="beneficiario-header">Beneficiario 3 (Opcional)</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Nombre Completo</label>
+                                <input type="text" name="nombreBeneficiario3">
+                            </div>
+                            <div class="form-group">
+                                <label>Cédula</label>
+                                <input type="text" name="cedulaBeneficiario3">
+                            </div>
+                            <div class="form-group">
+                                <label>Edad</label>
+                                <input type="number" name="edadBeneficiario3" min="1" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" name="telefonoBeneficiario3" placeholder="0999999999">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>N° Total de Beneficiarios <span class="required">*</span></label>
+                            <input type="number" name="numeroPersonas" min="1" max="3" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programa Académico -->
+                <div class="section">
+                    <div class="section-title">
+                        <span class="icon">📚</span>
+                        <span>Programa Académico</span>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Tipo de Programa <span class="required">*</span></label>
+                            <select name="tipoPrograma" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Nivelación Académica">Nivelación Académica</option>
+                                <option value="Refuerzo Escolar">Refuerzo Escolar</option>
+                                <option value="Preparación Universitaria">Preparación Universitaria</option>
+                                <option value="Idiomas">Idiomas</option>
+                                <option value="Programación">Programación</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Modalidad <span class="required">*</span></label>
+                            <select name="modalidad" required>
+                                <option value="">Seleccione...</option>
+                                <option value="PRESENCIAL">Presencial</option>
+                                <option value="ONLINE">Online</option>
+                                <option value="HÍBRIDO">Híbrido</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tiempo de Tutorías</label>
+                            <input type="text" name="tiempoTutorias" placeholder="Ej: 2 horas semanales">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información de Pagos -->
+                <div class="section">
+                    <div class="section-title">
+                        <span class="icon">💰</span>
+                        <span>Información de Pagos</span>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Valor Total del Programa <span class="required">*</span></label>
+                            <input type="number" name="valorTotal" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Cuotas <span class="required">*</span></label>
+                            <input type="number" name="numeroPagos" min="1" max="18" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor de Inscripción</label>
+                            <input type="number" name="inscripcion" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-container">
+                    <button type="button" class="btn-secondary" onclick="resetForm()">Limpiar</button>
+                    <button type="submit" class="btn-primary">Registrar Estudiante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // IMPORTANTE: Reemplaza esta URL con la URL de tu webhook de n8n
+        const WEBHOOK_URL = 'http://localhost:5678/webhook/registro-estudiante';
+
+        const form = document.getElementById('registroForm');
+        const loading = document.getElementById('loading');
+        const alertSuccess = document.getElementById('alertSuccess');
+        const alertError = document.getElementById('alertError');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Ocultar alertas previas
+            alertSuccess.style.display = 'none';
+            alertError.style.display = 'none';
+            
+            // Mostrar loading
+            loading.style.display = 'block';
+            
+            // Recopilar datos del formulario
+            const formData = new FormData(form);
+            const data = {};
+            
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            try {
+                // Enviar datos al webhook de n8n
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                loading.style.display = 'none';
+                
+                if (result.success) {
+                    alertSuccess.innerHTML = `
+                        <strong>✅ ¡Registro exitoso!</strong><br>
+                        Estudiante: ${result.nombreTitular}<br>
+                        N° Contrato: ${result.numeroContrato}<br>
+                        Valor Total: $${result.valorTotal}<br>
+                        ${result.numeroCuotas} cuotas de $${result.valorCuota} c/u
+                    `;
+                    alertSuccess.style.display = 'block';
+                    
+                    // Limpiar formulario después de 3 segundos
+                    setTimeout(() => {
+                        form.reset();
+                        alertSuccess.style.display = 'none';
+                    }, 5000);
+                } else {
+                    throw new Error(result.message || 'Error en el registro');
+                }
+                
+            } catch (error) {
+                loading.style.display = 'none';
+                alertError.innerHTML = `
+                    <strong>❌ Error:</strong> ${error.message}<br>
+                    Por favor, verifica los datos e intenta nuevamente.
+                `;
+                alertError.style.display = 'block';
+                
+                console.error('Error:', error);
+            }
+        });
+
+        function resetForm() {
+            form.reset();
+            alertSuccess.style.display = 'none';
+            alertError.style.display = 'none';
+        }
+
+        // Calcular y mostrar valor de cuota automáticamente
+        const valorTotalInput = document.querySelector('input[name="valorTotal"]');
+        const numeroPagosInput = document.querySelector('input[name="numeroPagos"]');
+
+        function calcularCuota() {
+            const total = parseFloat(valorTotalInput.value) || 0;
+            const cuotas = parseInt(numeroPagosInput.value) || 1;
+            
+            if (total > 0 && cuotas > 0) {
+                const valorCuota = (total / cuotas).toFixed(2);
+                console.log(`Valor por cuota: $${valorCuota}`);
+            }
+        }
+
+        valorTotalInput.addEventListener('input', calcularCuota);
+        numeroPagosInput.addEventListener('input', calcularCuota);
+    </script>
+</body>
+</html>
