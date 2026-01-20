@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Estudiantes - Academia</title>
+    <title>Registro de Estudiantes - Academia Eureka</title>
     <style>
         * {
             margin: 0;
@@ -32,6 +32,12 @@
             color: white;
             padding: 30px;
             text-align: center;
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 15px;
         }
 
         .header h1 {
@@ -246,12 +252,17 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
+            .logo {
+                max-width: 150px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <img src="https://i.imgur.com/your-eureka-logo.png" alt="Eureka Education" class="logo" id="eurekaLogo">
             <h1>🎓 Registro de Nuevos Estudiantes</h1>
             <p>Complete el formulario para registrar un nuevo contrato académico</p>
         </div>
@@ -281,8 +292,8 @@
                             <input type="date" name="fechaInicioTutorias" required>
                         </div>
                         <div class="form-group">
-                            <label>Día de Pago Mensual <span class="required">*</span></label>
-                            <input type="date" name="fechaPago" required>
+                            <label>Fecha de Corte <span class="required">*</span></label>
+                            <input type="number" name="fechaCorte" min="1" max="31" placeholder="Día del mes (1-31)" required>
                         </div>
                         <div class="form-group">
                             <label>Fecha Primer Pago <span class="required">*</span></label>
@@ -487,7 +498,7 @@
                         </div>
                         <div class="form-group">
                             <label>N° de Mensualidades <span class="required">*</span></label>
-                            <input type="number" name="numeroMensualidades" min="1" max="24" required>
+                            <input type="number" name="numeroMensualidades" id="numeroMensualidades" min="1" max="24" required>
                         </div>
                         <div class="form-group">
                             <label>Valor Mensual</label>
@@ -513,6 +524,16 @@
         const alertSuccess = document.getElementById('alertSuccess');
         const alertError = document.getElementById('alertError');
 
+        // Cargar logo de Eureka con fondo transparente
+        const logoElement = document.getElementById('eurekaLogo');
+        logoElement.src = 'data:image/svg+xml;base64,' + btoa(`
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
+                <text x="10" y="70" font-family="Arial Black, sans-serif" font-size="60" font-weight="bold" fill="#FFC107">Eü</text>
+                <text x="85" y="70" font-family="Arial Black, sans-serif" font-size="60" font-weight="bold" fill="#003d5c">reka!</text>
+                <text x="10" y="105" font-family="Arial, sans-serif" font-size="24" fill="#003d5c">EDUCATION</text>
+            </svg>
+        `);
+
         // Calcular saldo
         const precioTotalInput = document.getElementById('precioTotal');
         const matriculaInicialInput = document.getElementById('matriculaInicial');
@@ -530,7 +551,7 @@
         matriculaInicialInput.addEventListener('input', calcularSaldo);
 
         // Calcular valor mensual
-        const numeroMensualidadesInput = document.querySelector('input[name="numeroMensualidades"]');
+        const numeroMensualidadesInput = document.getElementById('numeroMensualidades');
         const valorMensualInput = document.getElementById('valorMensual');
 
         function calcularValorMensual() {
@@ -566,44 +587,61 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(data),
+                    mode: 'cors'
                 });
-                
-                const result = await response.json();
                 
                 loading.style.display = 'none';
                 
-                if (result.success) {
-                    alertSuccess.innerHTML = `
-                        <strong>✅ ¡Registro exitoso!</strong><br>
-                        Estudiante: ${data.nombreTitular}<br>
-                        N° Contrato: ${data.numeroContrato}<br>
-                        Programa: ${data.tipoPrograma}<br>
-                        Forma de Pago: ${data.formaPago}<br>
-                        Precio Total: ${data.precioTotal}<br>
-                        Valor Mensual: ${data.valorMensual}
-                    `;
-                    alertSuccess.style.display = 'block';
-                    
-                    // Limpiar formulario después de 5 segundos
-                    setTimeout(() => {
-                        form.reset();
-                        alertSuccess.style.display = 'none';
-                    }, 5000);
-                } else {
-                    throw new Error(result.message || 'Error en el registro');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                
+                const result = await response.json().catch(() => ({}));
+                
+                // Mostrar éxito
+                alertSuccess.innerHTML = `
+                    <strong>✅ ¡Registro exitoso!</strong><br>
+                    Estudiante: ${data.nombreTitular}<br>
+                    N° Contrato: ${data.numeroContrato}<br>
+                    Programa: ${data.tipoPrograma}<br>
+                    Forma de Pago: ${data.formaPago}<br>
+                    Precio Total: $${data.precioTotal}<br>
+                    Valor Mensual: $${data.valorMensual}
+                `;
+                alertSuccess.style.display = 'block';
+                
+                // Limpiar formulario después de 5 segundos
+                setTimeout(() => {
+                    form.reset();
+                    alertSuccess.style.display = 'none';
+                    saldoInput.value = '';
+                    valorMensualInput.value = '';
+                }, 5000);
                 
             } catch (error) {
                 loading.style.display = 'none';
+                
+                let errorMessage = error.message;
+                if (error.message === 'Failed to fetch') {
+                    errorMessage = 'No se puede conectar con el servidor. Verifica:<br>' +
+                                 '1. Que la URL del webhook sea correcta<br>' +
+                                 '2. Que n8n esté escuchando (botón "Listen for test event")<br>' +
+                                 '3. Que no haya bloqueos de CORS';
+                }
+                
                 alertError.innerHTML = `
-                    <strong>❌ Error:</strong> ${error.message}<br>
-                    Por favor, verifica los datos e intenta nuevamente.
+                    <strong>❌ Error de conexión:</strong><br>
+                    ${errorMessage}<br><br>
+                    <strong>URL intentada:</strong> ${WEBHOOK_URL}<br>
+                    Por favor, verifica la configuración de n8n.
                 `;
                 alertError.style.display = 'block';
                 
-                console.error('Error:', error);
+                console.error('Error completo:', error);
+                console.log('Datos que se intentaron enviar:', data);
             }
         });
 
@@ -611,8 +649,8 @@
             form.reset();
             alertSuccess.style.display = 'none';
             alertError.style.display = 'none';
-            document.getElementById('saldo').value = '';
-            document.getElementById('valorMensual').value = '';
+            saldoInput.value = '';
+            valorMensualInput.value = '';
         }
     </script>
 </body>
