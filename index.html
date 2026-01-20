@@ -277,8 +277,8 @@
                             <input type="text" name="numeroContrato" required>
                         </div>
                         <div class="form-group">
-                            <label>Fecha de Inducción <span class="required">*</span></label>
-                            <input type="date" name="fechaIngreso" required>
+                            <label>Fecha de Inicio de Tutorías <span class="required">*</span></label>
+                            <input type="date" name="fechaInicioTutorias" required>
                         </div>
                         <div class="form-group">
                             <label>Día de Pago Mensual <span class="required">*</span></label>
@@ -425,21 +425,17 @@
                             <label>Tipo de Programa <span class="required">*</span></label>
                             <select name="tipoPrograma" id="tipoPrograma" required>
                                 <option value="">Seleccione...</option>
-                                <option value="A1" data-tiempo="6">A1 - NIVEL (6 meses)</option>
-                                <option value="A2" data-tiempo="6">A2 - NIVEL (6 meses)</option>
-                                <option value="B1" data-tiempo="6">B1 - NIVEL (6 meses)</option>
-                                <option value="B2" data-tiempo="6">B2 - NIVEL (6 meses)</option>
-                                <option value="C1" data-tiempo="6">C1 - NIVEL (6 meses)</option>
-                                <option value="PC" data-tiempo="3">PC - PREPARACIÓN CAMBRIDGE (3 meses)</option>
-                                <option value="A1-A2-B1-PC" data-tiempo="15">PROGRAMA I (15 meses)</option>
-                                <option value="A2-B1-B2-PC" data-tiempo="15">PROGRAMA II (15 meses)</option>
-                                <option value="B1-B2-C1-PC" data-tiempo="15">PROGRAMA III (15 meses)</option>
-                                <option value="CRAWLERS-WALKERS-RUNNERS" data-tiempo="15">KIDS PROGRAM (15 meses)</option>
+                                <option value="A1">A1 - NIVEL</option>
+                                <option value="A2">A2 - NIVEL</option>
+                                <option value="B1">B1 - NIVEL</option>
+                                <option value="B2">B2 - NIVEL</option>
+                                <option value="C1">C1 - NIVEL</option>
+                                <option value="PC">PC - PREPARACIÓN CAMBRIDGE</option>
+                                <option value="A1-A2-B1-PC">PROGRAMA I</option>
+                                <option value="A2-B1-B2-PC">PROGRAMA II</option>
+                                <option value="B1-B2-C1-PC">PROGRAMA III</option>
+                                <option value="CRAWLERS-WALKERS-RUNNERS">KIDS PROGRAM</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Tiempo del Programa</label>
-                            <input type="text" name="tiempoPrograma" id="tiempoPrograma" readonly placeholder="Se completa automáticamente">
                         </div>
                         <div class="form-group">
                             <label>Modalidad <span class="required">*</span></label>
@@ -451,12 +447,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Tiempo de Tutorías</label>
-                            <input type="text" name="tiempoTutorias" placeholder="Ej: 2 horas semanales">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Fecha de Inicio de Tutorías <span class="required">*</span></label>
-                            <input type="date" name="fechaInicioTutorias" required>
+                            <label>Tiempo de Tutorías (meses) <span class="required">*</span></label>
+                            <input type="number" name="tiempoTutorias" min="1" max="36" placeholder="Ej: 6" required>
                         </div>
                     </div>
                 </div>
@@ -520,14 +512,6 @@
         const loading = document.getElementById('loading');
         const alertSuccess = document.getElementById('alertSuccess');
         const alertError = document.getElementById('alertError');
-
-        // Auto-completar tiempo de programa
-        document.getElementById('tipoPrograma').addEventListener('change', function(e) {
-            const selectedOption = e.target.options[e.target.selectedIndex];
-            const tiempo = selectedOption.getAttribute('data-tiempo');
-            const tiempoText = tiempo ? `${tiempo} meses` : '';
-            document.getElementById('tiempoPrograma').value = tiempoText;
-        });
 
         // Calcular saldo
         const precioTotalInput = document.getElementById('precioTotal');
@@ -627,7 +611,6 @@
             form.reset();
             alertSuccess.style.display = 'none';
             alertError.style.display = 'none';
-            document.getElementById('tiempoPrograma').value = '';
             document.getElementById('saldo').value = '';
             document.getElementById('valorMensual').value = '';
         }
