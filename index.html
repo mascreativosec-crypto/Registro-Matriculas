@@ -34,14 +34,14 @@
             text-align: center;
         }
 
-        .logo {
-            max-width: 200px;
-            height: auto;
-            margin-bottom: 15px;
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 5px;
         }
 
-        .header h1 {
-            font-size: 28px;
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
             margin-bottom: 10px;
         }
 
@@ -252,18 +252,14 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
-            .logo {
-                max-width: 150px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://i.imgur.com/your-eureka-logo.png" alt="Eureka Education" class="logo" id="eurekaLogo">
-            <h1>🎓 Registro de Nuevos Estudiantes</h1>
+            <h1>Eureka! Education</h1>
+            <p class="subtitle">🎓 Registro de Nuevos Estudiantes</p>
             <p>Complete el formulario para registrar un nuevo contrato académico</p>
         </div>
 
@@ -288,16 +284,8 @@
                             <input type="text" name="numeroContrato" required>
                         </div>
                         <div class="form-group">
-                            <label>Fecha de Inicio de Tutorías <span class="required">*</span></label>
-                            <input type="date" name="fechaInicioTutorias" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Fecha de Corte <span class="required">*</span></label>
-                            <input type="number" name="fechaCorte" min="1" max="31" placeholder="Día del mes (1-31)" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Fecha Primer Pago <span class="required">*</span></label>
-                            <input type="date" name="primerPago" required>
+                            <label>Fecha de Contrato <span class="required">*</span></label>
+                            <input type="date" name="fechaContrato" required>
                         </div>
                     </div>
                 </div>
@@ -359,6 +347,10 @@
                                 <label>Teléfono</label>
                                 <input type="tel" name="telefonoBeneficiario1" placeholder="0999999999">
                             </div>
+                            <div class="form-group full-width">
+                                <label>Correo Electrónico</label>
+                                <input type="email" name="correoBeneficiario1">
+                            </div>
                         </div>
                     </div>
 
@@ -382,6 +374,10 @@
                                 <label>Teléfono</label>
                                 <input type="tel" name="telefonoBeneficiario2" placeholder="0999999999">
                             </div>
+                            <div class="form-group full-width">
+                                <label>Correo Electrónico</label>
+                                <input type="email" name="correoBeneficiario2">
+                            </div>
                         </div>
                     </div>
 
@@ -404,6 +400,10 @@
                             <div class="form-group">
                                 <label>Teléfono</label>
                                 <input type="tel" name="telefonoBeneficiario3" placeholder="0999999999">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Correo Electrónico</label>
+                                <input type="email" name="correoBeneficiario3">
                             </div>
                         </div>
                     </div>
@@ -458,6 +458,10 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label>Fecha de Inicio de Tutorías <span class="required">*</span></label>
+                            <input type="date" name="fechaInicioTutorias" required>
+                        </div>
+                        <div class="form-group">
                             <label>Tiempo de Tutorías (meses) <span class="required">*</span></label>
                             <input type="number" name="tiempoTutorias" min="1" max="36" placeholder="Ej: 6" required>
                         </div>
@@ -483,6 +487,14 @@
                                     <label for="credito">Crédito</label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Corte <span class="required">*</span></label>
+                            <input type="number" name="fechaCorte" min="1" max="31" placeholder="Día del mes (1-31)" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Primer Pago <span class="required">*</span></label>
+                            <input type="date" name="primerPago" required>
                         </div>
                         <div class="form-group">
                             <label>Precio Total <span class="required">*</span></label>
@@ -523,16 +535,6 @@
         const loading = document.getElementById('loading');
         const alertSuccess = document.getElementById('alertSuccess');
         const alertError = document.getElementById('alertError');
-
-        // Cargar logo de Eureka con fondo transparente
-        const logoElement = document.getElementById('eurekaLogo');
-        logoElement.src = 'data:image/svg+xml;base64,' + btoa(`
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120">
-                <text x="10" y="70" font-family="Arial Black, sans-serif" font-size="60" font-weight="bold" fill="#FFC107">Eü</text>
-                <text x="85" y="70" font-family="Arial Black, sans-serif" font-size="60" font-weight="bold" fill="#003d5c">reka!</text>
-                <text x="10" y="105" font-family="Arial, sans-serif" font-size="24" fill="#003d5c">EDUCATION</text>
-            </svg>
-        `);
 
         // Calcular saldo
         const precioTotalInput = document.getElementById('precioTotal');
