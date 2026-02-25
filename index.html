@@ -3,264 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Estudiantes - Academia Eureka</title>
+    <title>Registro de Estudiantes - All American English Riobamba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --navy: #111e4c;
+            --red: #cf080d;
+            --silver: #d3d1d4;
+            --silver-light: #f5f5f6;
+            --text: #1a1a2e;
+            --text-muted: #666;
+            --white: #ffffff;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(145deg, #1a1a2e 0%, #2c2c3e 40%, #3a3a50 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 16px;
+            color: var(--text);
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(17, 30, 76, 0.1);
             overflow: hidden;
         }
 
+        /* HEADER */
         .header {
-            background: linear-gradient(135deg, #003d5c 0%, #005a82 100%);
+            background: var(--navy);
             color: white;
-            padding: 30px;
+            padding: 28px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            gap: 12px;
         }
 
-        .header h1 {
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
-
-        .header .subtitle {
-            font-size: 18px;
-            opacity: 0.95;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .form-container {
-            padding: 40px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            color: #003d5c;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+        .header-logo {
+            width: 52px;
+            height: 52px;
+            background: #6b6b7e;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
         }
+
+        .header-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .header-text h1 span { color: var(--silver); }
+
+        .header-text p {
+            font-size: 12px;
+            color: rgba(211,209,212,0.75);
+            margin-top: 4px;
+        }
+
+        /* FORM */
+        .form-container { padding: 36px 40px; }
+
+        .alert {
+            padding: 13px 16px;
+            border-radius: 6px;
+            margin-bottom: 22px;
+            display: none;
+            font-size: 13.5px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .alert-success { background: #edf7ed; color: #1e5c1e; border-left: 4px solid #3d9b3d; }
+        .alert-error { background: #fdf0f0; color: #7a1515; border-left: 4px solid var(--red); }
+
+        .loading { display: none; text-align: center; padding: 18px; }
+
+        .spinner {
+            border: 3px solid #eee;
+            border-top: 3px solid var(--navy);
+            border-radius: 50%;
+            width: 34px; height: 34px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* SECTIONS */
+        .section { margin-bottom: 32px; }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--red);
+        }
+
+        .section-title .icon { font-size: 17px; }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full-width { grid-column: 1 / -1; }
 
         label {
+            font-size: 12.5px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 5px;
         }
 
-        label .required {
-            color: #e74c3c;
-            margin-left: 3px;
-        }
+        label .required { color: var(--red); margin-left: 2px; }
 
         input, select, textarea {
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 9px 12px;
+            border: 1.5px solid var(--silver);
+            border-radius: 6px;
             font-size: 14px;
-            transition: all 0.3s ease;
             font-family: inherit;
+            color: var(--text);
+            background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(17, 30, 76, 0.08);
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .btn-container {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        button {
-            padding: 15px 40px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+        input[readonly] {
+            background: var(--silver-light);
+            color: var(--navy);
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            cursor: default;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+        input::placeholder { color: #b0b0b0; }
+        textarea { resize: vertical; min-height: 80px; }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .icon {
-            font-size: 24px;
-        }
-
+        /* Beneficiarios */
         .beneficiario-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            background: var(--silver-light);
+            border: 1.5px solid #e4e4e7;
+            border-left: 3px solid var(--navy);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
 
         .beneficiario-header {
-            font-weight: 600;
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 14px;
         }
 
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            margin-top: 8px;
+        .info-box {
+            background: rgba(17,30,76,0.04);
+            border-left: 3px solid var(--navy);
+            padding: 11px 14px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .info-box strong { color: var(--navy); }
+
+        .radio-group { display: flex; gap: 22px; margin-top: 5px; align-items: center; }
+
+        .radio-option { display: flex; align-items: center; gap: 7px; }
 
         .radio-option input[type="radio"] {
-            width: 20px;
-            height: 20px;
+            width: 15px; height: 15px;
+            accent-color: var(--navy);
             cursor: pointer;
         }
 
         .radio-option label {
             margin: 0;
             cursor: pointer;
+            font-size: 14px;
             font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
         }
 
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            color: #0d47a1;
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid #f0f0f0;
         }
 
-        @media (max-width: 768px) {
-            .form-container {
-                padding: 20px;
-            }
+        button {
+            padding: 10px 26px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
+        .btn-primary { background: var(--navy); color: white; }
+        .btn-primary:hover { background: #192e72; box-shadow: 0 4px 14px rgba(17,30,76,0.25); }
+
+        .btn-secondary { background: var(--white); color: var(--text-muted); border: 1.5px solid var(--silver); }
+        .btn-secondary:hover { background: var(--silver-light); }
+
+        @media (max-width: 640px) {
+            .form-container { padding: 20px; }
+            .header { padding: 18px 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .btn-container { flex-direction: column-reverse; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Eureka! Education</h1>
-            <p class="subtitle">🎓 Registro de Nuevos Estudiantes</p>
-            <p>Complete el formulario para registrar un nuevo contrato académico</p>
+            <div class="header-logo">🎓</div>
+            <div class="header-text">
+                <h1>All American English <span>Riobamba</span></h1>
+                <p>Registro de Nuevos Estudiantes — Complete el formulario para registrar un nuevo contrato académico</p>
+            </div>
         </div>
 
         <div class="form-container">
@@ -268,16 +266,13 @@
             <div id="alertError" class="alert alert-error"></div>
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <p>Procesando registro...</p>
+                <p style="font-size:13px;color:var(--text-muted);">Procesando registro...</p>
             </div>
 
             <form id="registroForm">
-                <!-- Información del Contrato -->
+
                 <div class="section">
-                    <div class="section-title">
-                        <span class="icon">📋</span>
-                        <span>Información del Contrato</span>
-                    </div>
+                    <div class="section-title"><span class="icon">📋</span> Información del Contrato</div>
                     <div class="form-grid">
                         <div class="form-group">
                             <label>N° de Contrato <span class="required">*</span></label>
@@ -290,12 +285,8 @@
                     </div>
                 </div>
 
-                <!-- Datos del Titular -->
                 <div class="section">
-                    <div class="section-title">
-                        <span class="icon">👤</span>
-                        <span>Datos del Titular</span>
-                    </div>
+                    <div class="section-title"><span class="icon">👤</span> Datos del Titular</div>
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Nombre Completo <span class="required">*</span></label>
@@ -320,14 +311,9 @@
                     </div>
                 </div>
 
-                <!-- Beneficiarios -->
                 <div class="section">
-                    <div class="section-title">
-                        <span class="icon">👥</span>
-                        <span>Beneficiarios (Hasta 3 personas)</span>
-                    </div>
-                    
-                    <!-- Beneficiario 1 -->
+                    <div class="section-title"><span class="icon">👥</span> Beneficiarios (Hasta 3 personas)</div>
+
                     <div class="beneficiario-item">
                         <div class="beneficiario-header">Beneficiario 1</div>
                         <div class="form-grid">
@@ -354,7 +340,6 @@
                         </div>
                     </div>
 
-                    <!-- Beneficiario 2 -->
                     <div class="beneficiario-item">
                         <div class="beneficiario-header">Beneficiario 2 (Opcional)</div>
                         <div class="form-grid">
@@ -381,7 +366,6 @@
                         </div>
                     </div>
 
-                    <!-- Beneficiario 3 -->
                     <div class="beneficiario-item">
                         <div class="beneficiario-header">Beneficiario 3 (Opcional)</div>
                         <div class="form-grid">
@@ -408,7 +392,7 @@
                         </div>
                     </div>
 
-                    <div class="form-grid">
+                    <div class="form-grid" style="margin-top:6px;">
                         <div class="form-group">
                             <label>N° Total de Beneficiarios <span class="required">*</span></label>
                             <input type="number" name="numeroPersonas" min="1" max="3" required>
@@ -416,25 +400,16 @@
                     </div>
                 </div>
 
-                <!-- Programa Académico -->
                 <div class="section">
-                    <div class="section-title">
-                        <span class="icon">📚</span>
-                        <span>Programa Académico</span>
-                    </div>
-                    
+                    <div class="section-title"><span class="icon">📚</span> Programa Académico</div>
                     <div class="info-box">
-                        <strong>ℹ️ Información de Programas:</strong><br>
-                        • A1, A2, B1, B2, C1: 6 MESES<br>
-                        • PC: 3 MESES<br>
-                        • PROGRAMA I, II, III: 15 MESES<br>
-                        • KIDS PROGRAM: 15 MESES
+                        <strong>Información de Programas:</strong><br>
+                        A1, A2, B1, B2, C1: 6 meses &nbsp;·&nbsp; PC: 3 meses &nbsp;·&nbsp; Programa I, II, III: 12 meses &nbsp;·&nbsp; Kids Program: 12 meses
                     </div>
-
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Tipo de Programa <span class="required">*</span></label>
-                            <select name="tipoPrograma" id="tipoPrograma" required>
+                            <select name="tipoPrograma" required>
                                 <option value="">Seleccione...</option>
                                 <option value="A1">A1 - NIVEL</option>
                                 <option value="A2">A2 - NIVEL</option>
@@ -468,12 +443,8 @@
                     </div>
                 </div>
 
-                <!-- Información de Pagos -->
                 <div class="section">
-                    <div class="section-title">
-                        <span class="icon">💰</span>
-                        <span>Información de Pagos</span>
-                    </div>
+                    <div class="section-title"><span class="icon">💰</span> Información de Pagos</div>
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Forma de Pago <span class="required">*</span></label>
@@ -483,7 +454,7 @@
                                     <label for="contado">Contado</label>
                                 </div>
                                 <div class="radio-option">
-                                    <input type="radio" id="credito" name="formaPago" value="CRÉDITO" required>
+                                    <input type="radio" id="credito" name="formaPago" value="CRÉDITO">
                                     <label for="credito">Crédito</label>
                                 </div>
                             </div>
@@ -506,7 +477,7 @@
                         </div>
                         <div class="form-group">
                             <label>Saldo</label>
-                            <input type="number" name="saldo" id="saldo" step="0.01" min="0" readonly>
+                            <input type="number" name="saldo" id="saldo" step="0.01" readonly>
                         </div>
                         <div class="form-group">
                             <label>N° de Mensualidades <span class="required">*</span></label>
@@ -514,13 +485,13 @@
                         </div>
                         <div class="form-group">
                             <label>Valor Mensual</label>
-                            <input type="number" name="valorMensual" id="valorMensual" step="0.01" min="0" readonly>
+                            <input type="number" name="valorMensual" id="valorMensual" step="0.01" readonly>
                         </div>
                     </div>
                 </div>
 
                 <div class="btn-container">
-                    <button type="button" class="btn-secondary" onclick="resetForm()">Limpiar</button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">Limpiar formulario</button>
                     <button type="submit" class="btn-primary">Registrar Estudiante</button>
                 </div>
             </form>
@@ -528,122 +499,68 @@
     </div>
 
     <script>
-        // IMPORTANTE: Reemplaza esta URL con la URL de tu webhook de n8n
         const WEBHOOK_URL = 'http://localhost:5678/webhook-test/registro-estudiante';
 
         const form = document.getElementById('registroForm');
         const loading = document.getElementById('loading');
         const alertSuccess = document.getElementById('alertSuccess');
         const alertError = document.getElementById('alertError');
-
-        // Calcular saldo
         const precioTotalInput = document.getElementById('precioTotal');
         const matriculaInicialInput = document.getElementById('matriculaInicial');
         const saldoInput = document.getElementById('saldo');
+        const numeroMensualidadesInput = document.getElementById('numeroMensualidades');
+        const valorMensualInput = document.getElementById('valorMensual');
 
         function calcularSaldo() {
-            const precioTotal = parseFloat(precioTotalInput.value) || 0;
-            const matriculaInicial = parseFloat(matriculaInicialInput.value) || 0;
-            const saldo = precioTotal - matriculaInicial;
-            saldoInput.value = saldo.toFixed(2);
+            const p = parseFloat(precioTotalInput.value) || 0;
+            const m = parseFloat(matriculaInicialInput.value) || 0;
+            saldoInput.value = (p - m).toFixed(2);
             calcularValorMensual();
+        }
+
+        function calcularValorMensual() {
+            const s = parseFloat(saldoInput.value) || 0;
+            const n = parseInt(numeroMensualidadesInput.value) || 1;
+            valorMensualInput.value = (n > 0 ? s / n : 0).toFixed(2);
         }
 
         precioTotalInput.addEventListener('input', calcularSaldo);
         matriculaInicialInput.addEventListener('input', calcularSaldo);
-
-        // Calcular valor mensual
-        const numeroMensualidadesInput = document.getElementById('numeroMensualidades');
-        const valorMensualInput = document.getElementById('valorMensual');
-
-        function calcularValorMensual() {
-            const saldo = parseFloat(saldoInput.value) || 0;
-            const numeroMensualidades = parseInt(numeroMensualidadesInput.value) || 1;
-            const valorMensual = numeroMensualidades > 0 ? (saldo / numeroMensualidades) : 0;
-            valorMensualInput.value = valorMensual.toFixed(2);
-        }
-
         numeroMensualidadesInput.addEventListener('input', calcularValorMensual);
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            // Ocultar alertas previas
             alertSuccess.style.display = 'none';
             alertError.style.display = 'none';
-            
-            // Mostrar loading
             loading.style.display = 'block';
-            
-            // Recopilar datos del formulario
-            const formData = new FormData(form);
+
             const data = {};
-            
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-            
+            new FormData(form).forEach((v, k) => { data[k] = v; });
+
             try {
-                // Enviar datos al webhook de n8n
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
                     mode: 'cors'
                 });
-                
                 loading.style.display = 'none';
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const result = await response.json().catch(() => ({}));
-                
-                // Mostrar éxito
-                alertSuccess.innerHTML = `
-                    <strong>✅ ¡Registro exitoso!</strong><br>
-                    Estudiante: ${data.nombreTitular}<br>
-                    N° Contrato: ${data.numeroContrato}<br>
-                    Programa: ${data.tipoPrograma}<br>
-                    Forma de Pago: ${data.formaPago}<br>
-                    Precio Total: $${data.precioTotal}<br>
-                    Valor Mensual: $${data.valorMensual}
-                `;
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                await response.json().catch(() => ({}));
+
+                alertSuccess.innerHTML = `<strong>✅ Registro exitoso</strong><br>
+                    Estudiante: ${data.nombreTitular} &nbsp;·&nbsp; N° Contrato: ${data.numeroContrato}<br>
+                    Programa: ${data.tipoPrograma} &nbsp;·&nbsp; Pago: ${data.formaPago} &nbsp;·&nbsp; Total: $${data.precioTotal} &nbsp;·&nbsp; Mensual: $${data.valorMensual}`;
                 alertSuccess.style.display = 'block';
-                
-                // Limpiar formulario después de 5 segundos
-                setTimeout(() => {
-                    form.reset();
-                    alertSuccess.style.display = 'none';
-                    saldoInput.value = '';
-                    valorMensualInput.value = '';
-                }, 5000);
-                
+                setTimeout(() => { form.reset(); alertSuccess.style.display = 'none'; saldoInput.value = ''; valorMensualInput.value = ''; }, 6000);
+
             } catch (error) {
                 loading.style.display = 'none';
-                
-                let errorMessage = error.message;
-                if (error.message === 'Failed to fetch') {
-                    errorMessage = 'No se puede conectar con el servidor. Verifica:<br>' +
-                                 '1. Que la URL del webhook sea correcta<br>' +
-                                 '2. Que n8n esté escuchando (botón "Listen for test event")<br>' +
-                                 '3. Que no haya bloqueos de CORS';
-                }
-                
-                alertError.innerHTML = `
-                    <strong>❌ Error de conexión:</strong><br>
-                    ${errorMessage}<br><br>
-                    <strong>URL intentada:</strong> ${WEBHOOK_URL}<br>
-                    Por favor, verifica la configuración de n8n.
-                `;
+                let msg = error.message === 'Failed to fetch'
+                    ? 'No se puede conectar con el servidor. Verifica la URL del webhook y que n8n esté en escucha.'
+                    : error.message;
+                alertError.innerHTML = `<strong>❌ Error de conexión:</strong> ${msg}`;
                 alertError.style.display = 'block';
-                
-                console.error('Error completo:', error);
-                console.log('Datos que se intentaron enviar:', data);
             }
         });
 
